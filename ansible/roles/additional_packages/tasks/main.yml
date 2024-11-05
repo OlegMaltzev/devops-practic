@@ -1,0 +1,11 @@
+- name: "Install epel-release yum"
+  ansible.builtin.yum:
+    name: epel-release
+    update_cache: yes
+    state: latest
+
+- name: "Installing additional packages"
+  ansible.builtin.yum: pkg={{ item }} state=latest
+  with_items:
+    - git
+    - mc   # not required for the application, just for my convenience

@@ -1,0 +1,13 @@
+---
+- hosts: "all"
+  become: true
+  vars_files:
+    - ./vars/vars.yml
+  vars:
+
+  roles: 
+    - role: anxs.postgresql
+    - postgres
+    - additional_packages
+    - semaphore
+    - nginx

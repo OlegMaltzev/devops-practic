@@ -1,0 +1,14 @@
+- name: "Replace postgres config"
+  ansible.builtin.copy:
+    src: files/pg_hba.conf
+    dest: /var/lib/pgsql/16/data/pg_hba.conf
+    owner: postgres
+    group: postgres
+    mode: 0600
+
+- name: Restart PostgreSQL server
+  ansible.builtin.service:
+    name: "{{ postgresql_daemon }}"
+    state: restarted
+    enabled: yes
+

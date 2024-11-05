@@ -1,0 +1,16 @@
+{
+ 	"postgres": {
+ 		"host": "127.0.0.1:5432",
+ 		"user": "semaphore1",
+ 		"pass": "semaphorepass1",
+ 		"name": "semaphoredb1",
+ 		"options": {
+ 			"sslmode": "disable"
+ 		}
+ 	},
+ 	"dialect": "postgres",
+ 	"tmp_path": "/tmp/semaphore",
+ 	"cookie_hash": "g7iUek184+xo8KxSexwjU8y6x5hLPFy4J+982RnZZjY=",
+ 	"cookie_encryption": "OgyvdBfjARV1thTrUirGqHjJ73LY+6mh82BRm6KTj8M=",
+ 	"access_key_encryption": "/TH2pqov7qAAdTDv1kg1mfomWLeqIHS9Cbf9xX31RzY="
+ }

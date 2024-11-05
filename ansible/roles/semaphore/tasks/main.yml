@@ -1,0 +1,61 @@
+- name: Remote RPM install semaphore with yum
+  ansible.builtin.yum:
+    name: https://github.com/semaphoreui/semaphore/releases/download/v2.10.35/semaphore_2.10.35_linux_amd64.rpm
+    disable_gpg_check: True
+
+- name: Add a group semaphore
+  ansible.builtin.group:
+    name: semaphore
+#    system: yes
+    state: present
+
+- name: Add user to remote hosts
+  ansible.builtin.user:
+    name: semaphore
+    home: /home/semaphore
+    shell: /bin/bash
+    create_home: yes
+    group: semaphore
+
+- name: Add semaphore user
+  ansible.builtin.shell: semaphore user add --admin --login admin --name admin --email admin@example.com --password admin --config=/home/semaphore/config.json
+
+- name: Copy config.json
+  ansible.builtin.copy:
+    src: files/config.json
+    dest: /home/semaphore/config.json
+    owner: semaphore
+    group: semaphore
+    mode: 0644
+
+- name: open port 3000/tcp
+  ansible.posix.firewalld:
+    port: 3000/tcp
+    permanent: true
+    state: enabled
+
+- name: Reload firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: reloaded
+
+- name: Copy semaphore.service
+  ansible.builtin.copy:
+    src: files/semaphore.service
+    dest: /etc/systemd/system/semaphore.service
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Just force systemd to re-execute itself (2.8 and above)
+  ansible.builtin.systemd_service:
+    daemon_reexec: true
+
+- name: Enable service semaphore.service
+  ansible.builtin.systemd_service:
+    name: semaphore.service
+    state: started
+    enabled: true
+
+
+

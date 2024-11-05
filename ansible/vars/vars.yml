@@ -1,0 +1,29 @@
+---
+DB_NAME: semaphoredb1               # - имя базы данных
+DB_USER: semaphore1                 # - пользователь в базе данных
+DB_PASSWORD: semaphorepass1         # - пароль для базы данных
+
+# Basic settings
+postgresql_version: 16
+postgresql_admin_user: "postgres"
+postgresql_daemon: "postgresql-16.service"
+
+# List of databases to be created (optional)
+postgresql_databases:
+  - name: "{{ DB_NAME }}"
+    owner: "{{ DB_USER }}"          # optional; specify the owner of the database
+    state: "present"                # optional; one of 'present', 'absent', 'dump', 'restore'
+
+# List of users to be created (optional)
+postgresql_users:
+  - name: "{{ DB_USER }}"
+    pass: "{{ DB_PASSWORD }}"
+    encrypted: yes                  # if password should be encrypted, postgresql >= 10 does only accepts encrypted passwords
+    state: "present"                # optional; one of 'present', 'absent'
+
+# List of user privileges to be applied (optional)
+postgresql_user_privileges:
+  - name: "{{ DB_USER }}"           # user name
+    db: "{{ DB_NAME }}"             # database
+    priv: "ALL"                     # privilege string format: example: INSERT,UPDATE/table:SELECT/anothertable:ALL
+    role_attr_flags: "CREATEDB,REPLICATION,LOGIN" # role attribute flags

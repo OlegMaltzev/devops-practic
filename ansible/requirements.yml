@@ -1,0 +1,7 @@
+roles:
+  - name: anxs.postgresql
+    src: https://github.com/MrMegaNova/postgresql
+    version: v1.16.0
+collections:
+- name: community.postgresql
+- name: ansible.posix

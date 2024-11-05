@@ -1,0 +1,41 @@
+- name: "Install nginx yum"
+  ansible.builtin.yum:
+    name: nginx
+    update_cache: yes
+    state: latest
+
+- name: "Preparing the parameters of a self-signed SSL certificate"
+  ansible.builtin.copy:
+    src: files/ssl/
+    dest: /etc/nginx/ssl/
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Generete SSL certificate if doesn't exist
+  ansible.builtin.shell: openssl req -x509 -nodes -days 3652 -newkey rsa:2048 -keyout /etc/nginx/ssl/localhost.key -out /etc/nginx/ssl/localhost.crt -config /etc/nginx/ssl/ssl-info.txt
+  args:
+    creates: /etc/nginx/ssl/localhost.crt
+
+- name: "Copy semaphore config"
+  ansible.builtin.copy:
+    src: files/semaphore.conf
+    dest: /etc/nginx/conf.d/semaphore.conf
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: "Delete default config"
+  ansible.builtin.file:
+    state: absent
+    path: /etc/nginx/conf.d/default.conf
+
+- name: Enable service nginx
+  ansible.builtin.service:
+    name: "nginx"
+    enabled: yes
+
+- name: "Reload nginx"
+  ansible.builtin.service:
+    name: "nginx"
+    state: "reloaded"
