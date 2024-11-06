@@ -17,9 +17,6 @@
     create_home: yes
     group: semaphore
 
-- name: Add semaphore user
-  ansible.builtin.shell: semaphore user add --admin --login admin --name admin --email admin@example.com --password admin --config=/home/semaphore/config.json
-
 - name: Copy config.json
   ansible.builtin.copy:
     src: files/config.json
@@ -27,6 +24,9 @@
     owner: semaphore
     group: semaphore
     mode: 0644
+
+- name: Add semaphore user
+  ansible.builtin.shell: semaphore user add --admin --login admin --name admin --email admin@example.com --password admin --config=/home/semaphore/config.json
 
 - name: open port 3000/tcp
   ansible.posix.firewalld:
